@@ -1,0 +1,129 @@
+
+#!/bin/bash -x 
+
+# Stats - Computes the mean, median of multiple rows or columns of data
+# By Megan Aldridge
+# CS344 OSU Online
+# January 30, 2016
+
+
+#### Variables
+dataType=""
+dataFilePath="datafile$$"
+averageFile="avg$$"
+medianFile="med$$"
+
+
+#### Functions
+
+# Assign datafilepath from stdin or file
+function setFilePath {
+	if [ "$#" = "1" ]
+	then
+		#echo "data is from stdin";
+		cat > "$dataFilePath";
+	elif [ "$#" = "2" ]
+	then
+		#echo "data is from file";
+		dataFilePath=$2
+	else
+		echo "filepath not set";
+		exit 1;
+	fi
+}
+
+function rowStats {
+# Pass each line to average 
+# Compute average
+# Redirect average to tempFile
+
+	while read line
+	do
+		average  "$line" >> $averageFile
+	done < $dataFilePath
+
+
+# Pass each line to median
+# Compute median
+# Redirect median to tempFile
+
+	for line in $(cat $dataFilePath)
+	do
+		median "$line" >> $medianFile
+	done 
+
+}
+
+
+function output {
+# Format output 
+	echo "Formatting output"
+}
+
+# Calculate mean of row or column data
+function average {
+	local sum=0;
+	local count=0;
+	local average=0;
+	#echo "Calculating mean of data";
+	for num in $1
+	do
+		#echo $num
+		sum=$((sum+$num))
+		count=$((count+1))
+		#printf "sum= %s\ncount= %s\n" "$sum" "$count" 
+	done
+	#average=$(expr $sum / $count)
+	average=$(expr \( $sum + \( $count / 2 \) \) / $count)
+	printf "%s\t" "$average"
+}
+
+function median {
+	
+	echo $1
+	echo "end call"
+
+}
+# Determine if user wants column or row statistics
+function setDataType {
+	if [[ $1 == -r* ]];
+	then
+		dataType="row"
+		echo "calculating row stats";
+	elif [[ $1 == -c* ]];
+	then
+		dataType="column"
+		echo "calculating column stats";
+	else
+		exit 1;	
+	fi
+}
+
+function test {
+	if [ "foo" = "foo" ];
+	then
+		echo "expression evaluated as true"
+	fi
+}
+
+#### Main
+#printf "rows= %s\ncolumns= %s\n" "$rows" "$columns" 
+setFilePath $1 $2
+setDataType $1
+
+if [ $dataType == "row" ]
+then
+	echo "Calling row stats"
+	rowStats
+elif [ $dataType == "column" ]
+then
+	echo "Calling col stats"
+	#colStats
+else
+	exit 1;
+fi 
+
+
+output
+#test
+
