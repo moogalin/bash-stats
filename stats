@@ -12,7 +12,7 @@ dataType=""
 dataFilePath="datafile$$"
 averageFile="avg$$"
 medianFile="med$$"
-
+tempFilePath="tempfile$$"
 
 #### Functions
 
@@ -40,17 +40,49 @@ function rowStats {
 	while read line
 	do
 		average  "$line" >> $averageFile
-	done < $dataFilePath
+	done < "$dataFilePath"
 
 
 # Pass each line to median
 # Compute median
 # Redirect median to tempFile
 
-	for line in $(cat $dataFilePath)
+	while read line
 	do
+		#echo $line
 		median "$line" >> $medianFile
-	done 
+	done < "$dataFilePath"
+	
+}
+
+function colStats {
+# Figure out word count to determine number of columns 
+	local words="$(wc -w < $dataFilePath)"
+	local lines="$(wc -l < $dataFilePath)"
+	local columns=$(expr $words /  $lines )
+	local count=1	
+
+# Pass each line to average 
+# Compute average
+# Redirect average to tempFile
+
+	while [ $count -le $columns ];
+	do
+		average "$(cut -f$count < $dataFilePath)"  >> $averageFile  
+		let count=count+1
+	done
+
+# Pass each line to median
+# Compute median
+# Redirect median to tempFile
+	count=1
+
+	while [ $count -le $columns ];
+	do
+		median "$(cut -f$count < $dataFilePath)" >> $medianFile  
+		let count=count+1
+	done
+
 
 }
 
@@ -75,14 +107,34 @@ function average {
 	done
 	#average=$(expr $sum / $count)
 	average=$(expr \( $sum + \( $count / 2 \) \) / $count)
-	printf "%s\t" "$average"
+	printf "%s\n" "$average"
 }
 
 function median {
 	
-	echo $1
-	echo "end call"
+	local count=0;
+	local med=0;
+	
+	#echo "test: $1"
 
+	echo "$1" | tr "\t" "\n" | sort -g > $tempFilePath 	
+	
+	count="$(wc -l < $tempFilePath)"
+
+	# Check if n is even or odd
+	if [ $(( $count % 2 )) -eq 0 ]
+	then
+	#	echo "even"
+		med=$(expr \( $count / 2 \) + 1)	
+	elif [ $(( $count % 2 )) -eq 1 ]
+	then
+	#	echo "odd"
+		med=$(expr \( $count / 2 \) + 1)
+	#	echo $med				
+	fi
+	#echo "result"
+	
+	cat $tempFilePath | head --lines=$med | tail --lines=1 #>> medianFile	
 }
 # Determine if user wants column or row statistics
 function setDataType {
@@ -118,7 +170,7 @@ then
 elif [ $dataType == "column" ]
 then
 	echo "Calling col stats"
-	#colStats
+	colStats
 else
 	exit 1;
 fi 
