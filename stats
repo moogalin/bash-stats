@@ -1,6 +1,3 @@
-
-#!/bin/bash  
-
 # Stats - Computes the mean, median of multiple rows or columns of data
 # By Megan Aldridge
 # CS344 OSU Online
@@ -8,8 +5,7 @@
 
 
 #### Trap Signals
-trap cleanup SIGHUP SIGINT SIGTERM
-
+trap "rm -f *$$; exit" SIGHUP SIGINT SIGTERM
 
 
 #### Variables
@@ -107,6 +103,7 @@ function output {
 	if [[ $dataType == "row" ]];
 	then
 		printf "Average\tMedian\n"
+		
 		while read f1 <&7
 		do
    			 read f2 <&8
@@ -153,7 +150,6 @@ function median {
 	local count=0;
 	local med=0;
 	
-	# Make sure that each data point is separated by line, not tab, then sort
 	echo "$1" | tr "\t" "\n" | sort -g > $tempFilePath 	
 	
 	count="$(wc -l < $tempFilePath)"
@@ -215,11 +211,15 @@ function checkIfFileEmpty {
 
 # Cleanup temporary files
 function cleanup {
-	rm -f avg* med* temp* datafile*; exit
+	rm -f avg* med* temp* datafile*; exit 0;
 }
 
 
 #### Main
+
+#### Trap Signals
+trap "rm -f *$$; exit 1" SIGHUP SIGINT SIGTERM
+
 setFilePath $1 $2 $3
 checkIfFileExists
 checkIfFileReadable
@@ -238,4 +238,3 @@ fi
 
 output
 cleanup
-
