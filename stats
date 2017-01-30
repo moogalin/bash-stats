@@ -105,8 +105,7 @@ function output {
 	# Format row output
 	if [[ $dataType == "row" ]];
 	then
-		printf "Average\tMedian"
-		
+		printf "Average\tMedian\n"
 		while read f1 <&7
 		do
    			 read f2 <&8
