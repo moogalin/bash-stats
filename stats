@@ -153,6 +153,7 @@ function median {
 	local count=0;
 	local med=0;
 	
+	# Make sure that each data point is separated by line, not tab, then sort
 	echo "$1" | tr "\t" "\n" | sort -g > $tempFilePath 	
 	
 	count="$(wc -l < $tempFilePath)"
