@@ -3,12 +3,12 @@ Creating file1 file2 file3 file4 file5
 
 
 total 0
--rw-rw----. 1 aldridme upg60756  259 Jan 29 17:16 file1
--rw-rw----. 1 aldridme upg60756   49 Jan 29 17:16 file2
--rw-rw----. 1 aldridme upg60756    3 Jan 29 17:16 file3
--rw-rw----. 1 aldridme upg60756    0 Jan 29 17:16 file4
--rw-rw----. 1 aldridme upg60756 5831 Jan 29 17:16 file5
--rwxr-x---. 1 aldridme upg60756 3465 Jan 29 17:16 stats
+-rw-rw----. 1 aldridme upg60756  259 Jan 29 18:38 file1
+-rw-rw----. 1 aldridme upg60756   49 Jan 29 18:38 file2
+-rw-rw----. 1 aldridme upg60756    3 Jan 29 18:38 file3
+-rw-rw----. 1 aldridme upg60756    0 Jan 29 18:38 file4
+-rw-rw----. 1 aldridme upg60756 5831 Jan 29 18:38 file5
+-rwxr-x---. 1 aldridme upg60756 4227 Jan 29 18:38 stats
 
 
 ------------------------------------------------------------------------------------------------------
@@ -95,22 +95,13 @@ Medians:
 ------------------------------------------------------------------------------------------------------
 File 4 Statistics by Rows: lose 3 points if result contains any numbers; nothing or error text are OK
 
-Average Median
-./stats: line 90: avg14433: No such file or directory
+Warning: Data file is empty
 
 
 ------------------------------------------------------------------------------------------------------
 File 4 Statistics by Cols: lose 3 points if result contains any numbers; nothing or error text are OK
 
-expr: division by zero
-./stats: line 69: [: 1: unary operator expected
-./stats: line 80: [: 1: unary operator expected
-Averages:
-cat: avg14435: No such file or directory
-
-Medians:
-cat: med14435: No such file or directory
-
+Warning: Data file is empty
 
 
 ------------------------------------------------------------------------------------------------------
@@ -192,43 +183,33 @@ Error Message:
 Bad Syntax
 
 Too Few Arguments: 1 point for usage text, 2 points for exit value 1
-filepath not set
 Exit Value: 1
 Error Message:
+./stats {-row|-cols} [file]
 
 Too Many Arguments: 1 point for usage text, 2 points for exit value 1
-Average Median
-94	93
-86	84
-74	81
-74	80
-80	81
-64	61
-55	54
-54	53
-100	100
-Exit Value: 0
+Exit Value: 1
 Error Message:
+./stats {-rows|-cols} [file]
 
 Wrong Format: 1 point for usage text, 2 points for exit value 1
 Exit Value: 1
 Error Message:
+./stats {-rows|-cols} [file]
 
 Bad Option: 1 point for usage text, 2 points for exit value 1
 Exit Value: 1
 Error Message:
+./stats {-rows|-cols} [file]
 
 
 ------------------------------------------------------------------------------------------------------
 File Not Readable: 2 points for error msg, 2 points for program halting
 
 
-Average Median
-Exit Value: 0
+Exit Value: 1
 Error Message:
-./stats: line 35: file3: Permission denied
-./stats: line 35: file3: Permission denied
-./stats: line 90: avg14989: No such file or directory
+./stats: cannot read file3
 
 
 
@@ -273,11 +254,27 @@ Average Median
 
 Run 2 Output: 5 points for succesful run 2
 Average Median
-./stats: line 90: avg14996: No such file or directory
+94	93
+86	84
+74	81
+74	80
+80	81
+64	61
+55	54
+54	53
+100	100
 
 Run 3 Output: 5 points for succesful run 3
 Average Median
-./stats: line 90: avg14997: No such file or directory
+94	93
+86	84
+74	81
+74	80
+80	81
+64	61
+55	54
+54	53
+100	100
 
 
 After Finishing: 5 points if no temp file
@@ -293,8 +290,8 @@ Trap Signals Test - ignore any messages about a process not being able to be kil
 
 
 Before Kill
-avg15352
-datafile15352
+avg7424
+datafile7424
 file1
 file2
 file3
@@ -303,17 +300,15 @@ file5
 stats
 
   PID TTY          TIME CMD
-12968 pts/31   00:00:00 p1gradingscript
-15352 pts/31   00:00:00 p1gradingscript
-15669 pts/31   00:00:00 ps
+ 5352 pts/31   00:00:00 p1gradingscript
+ 7424 pts/31   00:00:00 p1gradingscript
+ 7731 pts/31   00:00:00 ps
 27510 pts/31   00:00:00 tcsh
 27550 pts/31   00:00:00 bash
 
-./p1gradingscript: line 290: 15352 Terminated              $STATS -rows < file5 > /dev/null
 
 After Kill: 8 points if no temp files
-avg15352
-datafile15352
+datafile7424
 file1
 file2
 file3
@@ -322,8 +317,8 @@ file5
 stats
 
   PID TTY          TIME CMD
-12968 pts/31   00:00:00 p1gradingscript
-15693 pts/31   00:00:00 ps
+ 5352 pts/31   00:00:00 p1gradingscript
+ 7754 pts/31   00:00:00 ps
 27510 pts/31   00:00:00 tcsh
 27550 pts/31   00:00:00 bash
 

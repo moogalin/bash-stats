@@ -7,6 +7,10 @@
 # January 30, 2016
 
 
+#### Trap Signals
+trap "rm -f avg* med* tempfile*; exit" SIGHUP SIGINT SIGTERM
+
+
 #### Variables
 dataType=""
 dataFilePath="datafile$$"
@@ -18,16 +22,20 @@ tempFilePath="tempfile$$"
 
 # Assign datafilepath from stdin or file
 function setFilePath {
-	if [ "$#" = "1" ]
+	if [ "$#" = "0" ]
 	then
-	#	echo "data is from stdin";
+		echo "./stats {-row|-cols} [file]" 1>&2
+		exit 1
+	elif [ "$#" = "1" ]
+	then
+#		echo "data is from stdin";
 		cat > "$dataFilePath";
 	elif [ "$#" = "2" ]
 	then
-	#	echo "data is from file";
+#		echo "data is from file";
 		dataFilePath=$2
 	else
-		echo "filepath not set";
+		echo "./stats {-rows|-cols} [file]" 1>&2
 		exit 1;
 	fi
 }
@@ -175,14 +183,46 @@ function setDataType {
 		dataType="column"
 	#	echo "calculating column stats";
 	else
+		echo "./stats {-rows|-cols} [file]" 1>&2
 		exit 1;	
+	fi
+}
+
+
+# Check file permissions
+function checkIfFileReadable {
+	if [[ ! -r $dataFilePath ]]
+	then
+		echo "./stats: cannot read $dataFilePath" 1>&2
+		exit 1;
+	fi
+}
+# Determine if the data file exists
+function checkIfFileExists {
+	if [[ ! -f $dataFilePath ]]
+	then
+		echo "./stats: cannot read $dataFilePath" 1>&2
+		exit 1;
+	fi
+
+}
+
+# Determine if the data file is empty 
+function checkIfFileEmpty {
+	if [[ ! -s $dataFilePath ]]
+	then
+		echo "Warning: Data file is empty" 1>&2
+		exit 0;
 	fi
 }
 
 
 #### Main
 #printf "rows= %s\ncolumns= %s\n" "$rows" "$columns" 
-setFilePath $1 $2
+setFilePath $1 $2 $3
+checkIfFileExists
+checkIfFileReadable
+checkIfFileEmpty 
 setDataType $1
 
 if [ $dataType == "row" ]
