@@ -1,3 +1,7 @@
+
+
+#!/bin/bash
+
 # Stats - Computes the mean, median of multiple rows or columns of data
 # By Megan Aldridge
 # CS344 OSU Online

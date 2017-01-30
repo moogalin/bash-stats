@@ -3,12 +3,12 @@ Creating file1 file2 file3 file4 file5
 
 
 total 0
--rw-rw----. 1 aldridme upg60756  259 Jan 30 00:51 file1
--rw-rw----. 1 aldridme upg60756   49 Jan 30 00:51 file2
--rw-rw----. 1 aldridme upg60756    3 Jan 30 00:51 file3
--rw-rw----. 1 aldridme upg60756    0 Jan 30 00:51 file4
--rw-rw----. 1 aldridme upg60756 5831 Jan 30 00:51 file5
--rwxr-x---. 1 aldridme upg60756 4016 Jan 30 00:51 stats
+-rw-rw----. 1 aldridme upg60756  259 Jan 30 00:55 file1
+-rw-rw----. 1 aldridme upg60756   49 Jan 30 00:55 file2
+-rw-rw----. 1 aldridme upg60756    3 Jan 30 00:55 file3
+-rw-rw----. 1 aldridme upg60756    0 Jan 30 00:55 file4
+-rw-rw----. 1 aldridme upg60756 5831 Jan 30 00:55 file5
+-rwxr-x---. 1 aldridme upg60756 4031 Jan 30 00:55 stats
 
 
 ------------------------------------------------------------------------------------------------------
@@ -290,8 +290,8 @@ Trap Signals Test - ignore any messages about a process not being able to be kil
 
 
 Before Kill
-avg20671
-datafile20671
+avg4386
+datafile4386
 file1
 file2
 file3
@@ -300,11 +300,11 @@ file5
 stats
 
   PID TTY          TIME CMD
+ 2251 pts/1    00:00:00 p1gradingscript
+ 4386 pts/1    00:00:00 p1gradingscript
+ 4700 pts/1    00:00:00 ps
 14827 pts/1    00:00:00 tcsh
 14857 pts/1    00:00:00 bash
-18594 pts/1    00:00:00 p1gradingscript
-20671 pts/1    00:00:00 p1gradingscript
-21072 pts/1    00:00:00 ps
 
 
 After Kill: 8 points if no temp files
@@ -316,9 +316,9 @@ file5
 stats
 
   PID TTY          TIME CMD
+ 2251 pts/1    00:00:00 p1gradingscript
+ 4721 pts/1    00:00:00 ps
 14827 pts/1    00:00:00 tcsh
 14857 pts/1    00:00:00 bash
-18594 pts/1    00:00:00 p1gradingscript
-21539 pts/1    00:00:00 ps
 
 
