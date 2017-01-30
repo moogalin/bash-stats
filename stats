@@ -20,11 +20,11 @@ tempFilePath="tempfile$$"
 function setFilePath {
 	if [ "$#" = "1" ]
 	then
-		#echo "data is from stdin";
+	#	echo "data is from stdin";
 		cat > "$dataFilePath";
 	elif [ "$#" = "2" ]
 	then
-		#echo "data is from file";
+	#	echo "data is from file";
 		dataFilePath=$2
 	else
 		echo "filepath not set";
@@ -89,7 +89,35 @@ function colStats {
 
 function output {
 # Format output 
-	echo "Formatting output"
+	if [[ $dataType == "row" ]];
+	then
+	#	echo "displaying row stats";
+	#	echo
+		echo "Average Median"
+	
+		
+		while read f1 <&7
+		do
+   			 read f2 <&8
+			 printf "%s\t%s\n" "$f1" "$f2"
+		done \
+ 		   7<$averageFile \
+ 		   8<$medianFile
+
+	elif [[ $dataType == "column" ]];
+	then
+	#	echo "displaying column stats";
+	#	echo
+		echo "Averages:"
+		cat $averageFile | tr "\n" "\t"
+		echo
+		echo "Medians:"
+		cat $medianFile | tr "\n" "\t"
+		echo	
+
+	else
+		exit 1;	
+	fi
 }
 
 # Calculate mean of row or column data
@@ -141,22 +169,16 @@ function setDataType {
 	if [[ $1 == -r* ]];
 	then
 		dataType="row"
-		echo "calculating row stats";
+	#	echo "calculating row stats";
 	elif [[ $1 == -c* ]];
 	then
 		dataType="column"
-		echo "calculating column stats";
+	#	echo "calculating column stats";
 	else
 		exit 1;	
 	fi
 }
 
-function test {
-	if [ "foo" = "foo" ];
-	then
-		echo "expression evaluated as true"
-	fi
-}
 
 #### Main
 #printf "rows= %s\ncolumns= %s\n" "$rows" "$columns" 
@@ -165,17 +187,18 @@ setDataType $1
 
 if [ $dataType == "row" ]
 then
-	echo "Calling row stats"
+#	echo "Calling row stats"
 	rowStats
 elif [ $dataType == "column" ]
 then
-	echo "Calling col stats"
+#	echo "Calling col stats"
 	colStats
 else
 	exit 1;
 fi 
 
-
 output
-#test
+
+rm -f avg* med* temp* datafile*
+
 
