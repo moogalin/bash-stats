@@ -1,5 +1,5 @@
 
-#!/bin/bash -x 
+#!/bin/bash  
 
 # Stats - Computes the mean, median of multiple rows or columns of data
 # By Megan Aldridge
@@ -8,7 +8,7 @@
 
 
 #### Trap Signals
-trap "rm -f avg* med* tempfile*; exit" SIGHUP SIGINT SIGTERM
+trap cleanup SIGHUP SIGINT SIGTERM
 
 
 #### Variables
@@ -22,18 +22,24 @@ tempFilePath="tempfile$$"
 
 # Assign datafilepath from stdin or file
 function setFilePath {
+
+	# Error: no data file	
 	if [ "$#" = "0" ]
 	then
 		echo "./stats {-row|-cols} [file]" 1>&2
 		exit 1
+
+	# Data file from standard input
 	elif [ "$#" = "1" ]
 	then
-#		echo "data is from stdin";
 		cat > "$dataFilePath";
+
+	# Date file from file
 	elif [ "$#" = "2" ]
 	then
-#		echo "data is from file";
 		dataFilePath=$2
+
+	# Error: too many arguments
 	else
 		echo "./stats {-rows|-cols} [file]" 1>&2
 		exit 1;
@@ -57,14 +63,13 @@ function rowStats {
 
 	while read line
 	do
-		#echo $line
 		median "$line" >> $medianFile
 	done < "$dataFilePath"
 	
 }
 
 function colStats {
-# Figure out word count to determine number of columns 
+# Figure out word count per line to determine number of columns 
 	local words="$(wc -w < $dataFilePath)"
 	local lines="$(wc -l < $dataFilePath)"
 	local columns=$(expr $words /  $lines )
@@ -94,15 +99,13 @@ function colStats {
 
 }
 
-
+# Format output for row or column data
 function output {
-# Format output 
+	
+	# Format row output
 	if [[ $dataType == "row" ]];
 	then
-	#	echo "displaying row stats";
-	#	echo
-		echo "Average Median"
-	
+		printf "Average\tMedian"
 		
 		while read f1 <&7
 		do
@@ -112,10 +115,9 @@ function output {
  		   7<$averageFile \
  		   8<$medianFile
 
+	# Format column output 	
 	elif [[ $dataType == "column" ]];
 	then
-	#	echo "displaying column stats";
-	#	echo
 		echo "Averages:"
 		cat $averageFile | tr "\n" "\t"
 		echo
@@ -128,60 +130,53 @@ function output {
 	fi
 }
 
-# Calculate mean of row or column data
+# Calculate average of row or column data
 function average {
 	local sum=0;
 	local count=0;
 	local average=0;
-	#echo "Calculating mean of data";
+	
 	for num in $1
 	do
-		#echo $num
 		sum=$((sum+$num))
 		count=$((count+1))
-		#printf "sum= %s\ncount= %s\n" "$sum" "$count" 
 	done
-	#average=$(expr $sum / $count)
+	
 	average=$(expr \( $sum + \( $count / 2 \) \) / $count)
 	printf "%s\n" "$average"
 }
 
+
+# Calculate median of row or column data
 function median {
 	
 	local count=0;
 	local med=0;
 	
-	#echo "test: $1"
-
 	echo "$1" | tr "\t" "\n" | sort -g > $tempFilePath 	
 	
 	count="$(wc -l < $tempFilePath)"
 
-	# Check if n is even or odd
+	# Check if count is even or odd
 	if [ $(( $count % 2 )) -eq 0 ]
 	then
-	#	echo "even"
 		med=$(expr \( $count / 2 \) + 1)	
 	elif [ $(( $count % 2 )) -eq 1 ]
 	then
-	#	echo "odd"
 		med=$(expr \( $count / 2 \) + 1)
-	#	echo $med				
 	fi
-	#echo "result"
 	
-	cat $tempFilePath | head --lines=$med | tail --lines=1 #>> medianFile	
+	cat $tempFilePath | head --lines=$med | tail --lines=1 	
 }
+
 # Determine if user wants column or row statistics
 function setDataType {
 	if [[ $1 == -r* ]];
 	then
 		dataType="row"
-	#	echo "calculating row stats";
 	elif [[ $1 == -c* ]];
 	then
 		dataType="column"
-	#	echo "calculating column stats";
 	else
 		echo "./stats {-rows|-cols} [file]" 1>&2
 		exit 1;	
@@ -197,6 +192,7 @@ function checkIfFileReadable {
 		exit 1;
 	fi
 }
+
 # Determine if the data file exists
 function checkIfFileExists {
 	if [[ ! -f $dataFilePath ]]
@@ -216,9 +212,14 @@ function checkIfFileEmpty {
 	fi
 }
 
+# Cleanup temporary files
+function cleanup {
+	rm -f avg* med* temp* datafile*
+}
+
+
 
 #### Main
-#printf "rows= %s\ncolumns= %s\n" "$rows" "$columns" 
 setFilePath $1 $2 $3
 checkIfFileExists
 checkIfFileReadable
@@ -227,18 +228,14 @@ setDataType $1
 
 if [ $dataType == "row" ]
 then
-#	echo "Calling row stats"
 	rowStats
 elif [ $dataType == "column" ]
 then
-#	echo "Calling col stats"
 	colStats
 else
 	exit 1;
 fi 
 
 output
-
-rm -f avg* med* temp* datafile*
-
+cleanup
 
