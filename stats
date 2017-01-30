@@ -11,6 +11,7 @@
 trap cleanup SIGHUP SIGINT SIGTERM
 
 
+
 #### Variables
 dataType=""
 dataFilePath="datafile$$"
@@ -26,7 +27,7 @@ function setFilePath {
 	# Error: no data file	
 	if [ "$#" = "0" ]
 	then
-		echo "./stats {-row|-cols} [file]" 1>&2
+		echo "./stats {-rows|-cols} [file]" 1>&2
 		exit 1
 
 	# Data file from standard input
@@ -213,9 +214,8 @@ function checkIfFileEmpty {
 
 # Cleanup temporary files
 function cleanup {
-	rm -f avg* med* temp* datafile*
+	rm -f avg* med* temp* datafile*; exit
 }
-
 
 
 #### Main

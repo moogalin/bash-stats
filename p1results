@@ -3,12 +3,12 @@ Creating file1 file2 file3 file4 file5
 
 
 total 0
--rw-rw----. 1 aldridme upg60756  259 Jan 29 19:00 file1
--rw-rw----. 1 aldridme upg60756   49 Jan 29 19:00 file2
--rw-rw----. 1 aldridme upg60756    3 Jan 29 19:00 file3
--rw-rw----. 1 aldridme upg60756    0 Jan 29 19:00 file4
--rw-rw----. 1 aldridme upg60756 5831 Jan 29 19:00 file5
--rwxr-x---. 1 aldridme upg60756 3944 Jan 29 19:00 stats
+-rw-rw----. 1 aldridme upg60756  259 Jan 29 19:16 file1
+-rw-rw----. 1 aldridme upg60756   49 Jan 29 19:16 file2
+-rw-rw----. 1 aldridme upg60756    3 Jan 29 19:16 file3
+-rw-rw----. 1 aldridme upg60756    0 Jan 29 19:16 file4
+-rw-rw----. 1 aldridme upg60756 5831 Jan 29 19:16 file5
+-rwxr-x---. 1 aldridme upg60756 3951 Jan 29 19:16 stats
 
 
 ------------------------------------------------------------------------------------------------------
@@ -185,7 +185,7 @@ Bad Syntax
 Too Few Arguments: 1 point for usage text, 2 points for exit value 1
 Exit Value: 1
 Error Message:
-./stats {-row|-cols} [file]
+./stats {-rows|-cols} [file]
 
 Too Many Arguments: 1 point for usage text, 2 points for exit value 1
 Exit Value: 1
@@ -254,11 +254,27 @@ Average	Median
 
 Run 2 Output: 5 points for succesful run 2
 Average	Median
-./stats: line 103: avg6441: No such file or directory
+94	93
+86	84
+74	81
+74	80
+80	81
+64	61
+55	54
+54	53
+100	100
 
 Run 3 Output: 5 points for succesful run 3
 Average	Median
-./stats: line 103: avg6442: No such file or directory
+94	93
+86	84
+74	81
+74	80
+80	81
+64	61
+55	54
+54	53
+100	100
 
 
 After Finishing: 5 points if no temp file
@@ -274,8 +290,8 @@ Trap Signals Test - ignore any messages about a process not being able to be kil
 
 
 Before Kill
-avg6733
-datafile6733
+avg7852
+datafile7852
 file1
 file2
 file3
@@ -284,14 +300,12 @@ file5
 stats
 
   PID TTY          TIME CMD
- 4522 pts/31   00:00:00 p1gradingscript
- 6733 pts/31   00:00:00 p1gradingscript
- 7040 pts/31   00:00:00 ps
-27510 pts/31   00:00:00 tcsh
-27550 pts/31   00:00:00 bash
+ 5780 pts/31   00:00:00 p1gradingscript
+ 7852 pts/31   00:00:00 p1gradingscript
+ 8161 pts/31   00:00:00 ps
+13309 pts/31   00:00:00 tcsh
+13334 pts/31   00:00:00 bash
 
-./stats: line 49: datafile6733: No such file or directory
-./stats: line 103: med6733: No such file or directory
 
 After Kill: 8 points if no temp files
 file1
@@ -302,9 +316,9 @@ file5
 stats
 
   PID TTY          TIME CMD
- 4522 pts/31   00:00:00 p1gradingscript
- 7381 pts/31   00:00:00 ps
-27510 pts/31   00:00:00 tcsh
-27550 pts/31   00:00:00 bash
+ 5780 pts/31   00:00:00 p1gradingscript
+ 8189 pts/31   00:00:00 ps
+13309 pts/31   00:00:00 tcsh
+13334 pts/31   00:00:00 bash
 
 
