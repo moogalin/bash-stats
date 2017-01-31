@@ -9,7 +9,7 @@
 
 
 #### Trap Signals
-trap "rm -f *$$; exit" SIGHUP SIGINT SIGTERM
+trap 'cleanup; exit 1;' SIGHUP SIGINT SIGTERM
 
 
 #### Variables
@@ -215,14 +215,11 @@ function checkIfFileEmpty {
 
 # Cleanup temporary files
 function cleanup {
-	rm -f avg* med* temp* datafile*; exit 0;
+	rm -f *$$
 }
 
 
 #### Main
-
-#### Trap Signals
-trap "rm -f *$$; exit 1" SIGHUP SIGINT SIGTERM
 
 setFilePath $1 $2 $3
 checkIfFileExists
@@ -242,3 +239,4 @@ fi
 
 output
 cleanup
+exit 0;
